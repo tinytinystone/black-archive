@@ -1,0 +1,25 @@
+.intro-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.intro{
+    font-size: 2.7rem;
+    line-height: 3;
+    color: grey;
+    font-weight: 900;
+}
+.start{
+    color: #191919;
+}
+.start:hover{
+    color: #fff;
+    background-color: #191919;
+    cursor: pointer;
+}
+a, a:hover, a:active {
+    color: inherit;
+    font: inherit;
+    text-decoration: none;
+}

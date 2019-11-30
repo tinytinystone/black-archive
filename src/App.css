@@ -1,0 +1,15 @@
+*, *::before, *::after{
+  box-sizing: border-box;
+}
+html {
+  font-size: 10px;
+}
+body {
+  min-width: 900px;
+  font-family: Helvetica;
+  font-size: 1.8rem;
+}
+.container {
+  margin: 0 auto;
+  max-width: 1366px;
+}

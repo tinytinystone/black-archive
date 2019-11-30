@@ -1,0 +1,12 @@
+header{
+    text-align: center;
+    height: 10vh;
+    font-size: 3.6rem;
+    letter-spacing: 10px;
+    font-weight: 900;
+    padding-top: 5px;
+}
+img {
+    width: 32vw;
+    height: 30vh;
+}
