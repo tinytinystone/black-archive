@@ -7,6 +7,20 @@ header{
     padding-top: 5px;
 }
 img {
-    width: 32vw;
-    height: 30vh;
+    width: 32%;
+    cursor: url('/images/picker.png');
+}
+.scroll {
+    position: fixed;
+    letter-spacing: 4px;
+    font-size: 36pt;
+    font-weight: 900;
+    bottom: 0;
+    color: #fff;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-bottom: 4px solid transparent
+}
+.scroll.scrolling{
+    border-bottom: 4px solid #fff;
 }
