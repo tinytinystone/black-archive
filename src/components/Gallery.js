@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 import { useDebouncedCallback } from "use-debounce";
-import { imageList, imageTagByLocation, imageTagByTime } from "../data/imageList";
+import moment from 'moment'
+import { imageList } from "../data/imageList";
 
 import Image from "./Image";
 import Modal from "./Modal";
 import "./Gallery.css";
+import Octicon, { Settings, X } from "@primer/octicons-react";
 
-const picker = "./picker.png";
 const images = (() => {
   let num = 1;
   const fileNames = [];
@@ -36,9 +37,54 @@ export default function Gallery(props) {
   const [mouseY, setMouseY] = useState(0);
   const [withBox, setWithBox] = useState(false);
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState(false)
+  const [mouseLeave, setMouseLeave] = useState(false)
+  const [when, setWhen] = useState('all')
+  const [where, setWhere] = useState('all')
+  const [sortBy, setSortBy] = useState('names')
   const [debouncedScroll] = useDebouncedCallback(() => {
     setScroll(false);
   }, 300);
+
+  const filterImages = images
+    .sort((a, b) => {
+      if (sortBy === 'dates') {
+        if (imageList[a].when > imageList[b].when) {
+          return 1;
+        }
+        if (imageList[a].when < imageList[b].when) {
+          return -1;
+        }
+        return 0;
+      } else {
+        return parseInt(a) - parseInt(b);
+      }
+    })
+    .filter(i => {
+      const byWhen = when === 'all' || imageList[i].when.includes(when)
+      let byWhere = where === 'all' || (where === 'KoreaWithOthers' ? (imageList[i].where.includes('Korea') && !imageList[i].where.includes('Seoul')) : imageList[i].where.includes(where))
+      return byWhen && byWhere
+    })
+
+  const handleTabWhen = when => {
+    setWhen(when)
+  }
+
+  const onSearchClick = () => {
+    if (search) {
+      setSearch(false)
+    } else {
+      setSearch(true)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    setMouseLeave(true)
+  }
+
+  const handleMouseOver = () => {
+    setMouseLeave(false)
+  }
 
   const handleImageChange = () => {
     setWithBox(true);
@@ -86,15 +132,50 @@ export default function Gallery(props) {
   const [r, g, b] = currentColor;
   return (
     <>
-      <div className="header">
+      <div className="header" style={{ position: 'relative' }}>
         <header>darkest color as night</header>
-        {/* <span>Tag</span> */}
+        <div style={{ position: 'absolute', top: '13px', right: '2px', cursor: 'pointer' }} onClick={onSearchClick}>
+          <Octicon icon={Settings} size='medium' onClick={onSearchClick} />
+        </div>
       </div>
       <div className="loading" style={{ display: loading ? 'block' : 'none' }}>
         <img src="./images/loading.gif" alt="loading" />
       </div>
       <div style={{ display: loading ? 'none' : 'block' }}>
-        {!isScrolling && !showsModal && !!mouseX && !!mouseY && (
+        <Modal showsModal={search}>
+          <div className="tab-toggle">
+            <div onClick={() => setSearch(false)} className="close"><Octicon icon={X} /></div>
+            <div className="tab-item">
+              <h3>Sort by</h3>
+              <ul>
+                <li onClick={() => setSortBy('dates')} style={{ color: sortBy === 'dates' ? 'black' : 'dimgray' }}>Dates</li>
+                <li onClick={() => setSortBy('names')} style={{ color: sortBy === 'names' ? 'black' : 'dimgray' }}>Names</li>
+              </ul>
+            </div>
+            <div className="tab-item">
+              <h3>When</h3>
+              <ul>
+                <li onClick={() => handleTabWhen('all')} style={{ color: when === 'all' ? 'black' : 'dimgray' }}>All</li>
+                <li onClick={() => handleTabWhen('2019')} style={{ color: when === '2019' ? 'black' : 'dimgray' }}>2019</li>
+                <li onClick={() => handleTabWhen('2018')} style={{ color: when === '2018' ? 'black' : 'dimgray' }}>2018</li>
+                <li onClick={() => handleTabWhen('2017')} style={{ color: when === '2017' ? 'black' : 'dimgray' }}>2017</li>
+                <li onClick={() => handleTabWhen('2015')} style={{ color: when === '2015' ? 'black' : 'dimgray' }}>2015</li>
+              </ul>
+            </div>
+            <div className="tab-item">
+              <h3>Where</h3>
+              <ul>
+                <li onClick={() => setWhere('all')} style={{ color: where === 'all' ? 'black' : 'dimgray' }}>All</li>
+                <li onClick={() => setWhere('Seoul')} style={{ color: where === 'Seoul' ? 'black' : 'dimgray' }}>Korea(Seoul)</li>
+                <li onClick={() => setWhere('KoreaWithOthers')} style={{ color: where === 'KoreaWithOthers' ? 'black' : 'dimgray' }}>Korea(others)</li>
+                <li onClick={() => setWhere('Italy')} style={{ color: where === 'Italy' ? 'black' : 'dimgray' }}>Italy</li>
+                <li onClick={() => setWhere('Switzerland')} style={{ color: where === 'Switzerland' ? 'black' : 'dimgray' }}>Switzerland</li>
+                <li onClick={() => setWhere('Japan')} style={{ color: where === 'Japan' ? 'black' : 'dimgray' }}>Japan</li>
+              </ul>
+            </div>
+          </div>
+        </Modal>
+        {!isScrolling && !showsModal && !!mouseX && !!mouseY && !mouseLeave && (
           <span
             style={{
               background: "#fff",
@@ -112,8 +193,10 @@ export default function Gallery(props) {
         <div className={classNames("scroll", { scrolling: isScrolling })} />
         <div
           className="gallery-container"
+          onMouseOver={handleMouseOver}
+          onMouseLeave={handleMouseLeave}
         >
-          {images.map((imageSrc, imageIndex) => (
+          {filterImages.map((imageSrc, imageIndex) => (
             <Image
               imageSrc={imageSrc}
               key={imageSrc}
@@ -126,6 +209,7 @@ export default function Gallery(props) {
           ))}
         </div>
         <Modal showsModal={showsModal} onCloseModal={onCloseModal}>
+          <div onClick={onCloseModal} className="close"><Octicon icon={X} /></div>
           <div className="modal-container">
             <div onMouseOver={handleImageChange} onMouseOut={handleImageOut} className="modal-image">
               <img
@@ -138,14 +222,14 @@ export default function Gallery(props) {
               />
             </div>
             <div className="modal-desc">
-              <p>{imageSrc && imageList[imageSrc].when}</p>
+              <p>{imageSrc && moment(imageList[imageSrc].when).format('YYYY. MM. DD. hh:mm a')}</p>
               <p>{imageSrc && imageList[imageSrc].where}</p>
             </div>
           </div>
         </Modal>
       </div>
-      {images.map((imageSrc, imageIndex) => (
-        <div className="hidden" key={imageSrc+imageIndex}>
+      {filterImages.map((imageSrc, imageIndex) => (
+        <div className="hidden" key={imageSrc + imageIndex}>
           <img
             src={`./images/box_added/${imageSrc}_2.jpg`}
             alt={imageSrc}

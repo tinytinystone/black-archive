@@ -8,7 +8,6 @@ export default function Modal({ showsModal, onCloseModal, children }) {
     return (
         <div className={showHideClassName}>
             <div className="modal-main">
-                <div onClick={onCloseModal} className="close"><Octicon icon={X} /></div>
                 {children}
             </div>
         </div>

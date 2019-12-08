@@ -15,8 +15,25 @@
   margin: auto;
   position: relative;
   background: white;
-  width: 900px;
-  height: 650px;
+}
+
+.tab-toggle{
+  display: flex;
+  background: #fff;
+}
+
+.tab-item {
+  margin: 20px;
+  padding: 10px;
+}
+
+.tab-item li {
+  cursor: pointer;
+  color: dimgray;
+}
+
+.tab-item li:hover {
+  background: lightgray;
 }
 
 .display-block {
@@ -31,7 +48,7 @@
   padding: 5px;
   position: absolute;
   top: 0;
-  right: 0;
+  right: 5px;
   cursor: pointer;
   color:  dimgrey;
 }
