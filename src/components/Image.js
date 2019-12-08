@@ -52,7 +52,7 @@ export default function Image(props) {
       1
     );
     props.handleMouseX(clientX+5);
-    props.handleMouseY(clientY+33);
+    props.handleMouseY(clientY+5);
     props.handleColor(color.data);
   };
   // useEffect(() => {
