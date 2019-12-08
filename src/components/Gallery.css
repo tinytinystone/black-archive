@@ -1,9 +1,8 @@
-header{
+.header{
     text-align: center;
-    height: 10vh;
     font-size: 3.2rem;
     letter-spacing: 10px;
-    padding-top: 15px;
+    padding: 20px 0;
 }
 .gallery-img{
     cursor: url('/images/picker.png') 0 31, auto;
@@ -26,14 +25,4 @@ header{
     left: 50%;
     transform: translate(-50%, -50%);
     height: auto;
-}
-.hidden{
-    position: absolute !important;
-    overflow: hidden;
-    padding: 0;
-    margin: -1px;
-    border: 0;
-    top: -10px;
-    left: -10px;
-    clip: rect(1px, 1px, 1px, 1px);
 }
