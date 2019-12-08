@@ -7,7 +7,7 @@ import Image from "./Image";
 import Modal from "./Modal";
 import "./Gallery.css";
 
-const picker = "./images/picker.png";
+const picker = "./picker.png";
 const images = (() => {
   let num = 1;
   const fileNames = [];
