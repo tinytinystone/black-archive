@@ -1,11 +1,11 @@
-header{
+.header{
     text-align: center;
     font-size: 3.2rem;
     letter-spacing: 10px;
     padding: 20px 0;
 }
 .gallery-img{
-    cursor: url('/picker.png') 0 31, auto;
+    cursor: url('/picker.png') 0 30, auto;
     width: 33.3%
 }
 .modal-container{

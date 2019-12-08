@@ -112,7 +112,6 @@ export default function Gallery(props) {
         <div className={classNames("scroll", { scrolling: isScrolling })} />
         <div
           className="gallery-container"
-          style={{ cursor: `url(${picker}),auto` }}
         >
           {images.map((imageSrc, imageIndex) => (
             <Image
