@@ -17,12 +17,6 @@ function App() {
           <Route path="/" component={Intro} />
         </Switch>
       </div>
-      <div className="hidden">
-        <img
-          src="./images/picker.png"
-          alt="picker"
-        />
-      </div>
     </Router>
   );
 }
