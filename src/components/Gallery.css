@@ -3,7 +3,7 @@ header{
     height: 10vh;
     font-size: 3.2rem;
     letter-spacing: 10px;
-    padding-top: 5px;
+    padding-top: 15px;
 }
 .gallery-img{
     cursor: url('/images/picker.png') 0 31, auto;

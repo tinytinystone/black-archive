@@ -88,7 +88,7 @@ export default function Gallery(props) {
     <>
       <div className="header">
         <header>darkest color as night</header>
-        <span>Tag</span>
+        {/* <span>Tag</span> */}
       </div>
       <div className="loading" style={{ display: loading ? 'block' : 'none' }}>
         <img src="./images/loading.gif" alt="loading" />
