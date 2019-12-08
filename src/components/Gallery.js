@@ -7,6 +7,26 @@ import Image from "./Image";
 import Modal from "./Modal";
 import "./Gallery.css";
 
+const picker = "./images/picker.png";
+const images = (() => {
+  let num = 1;
+  const fileNames = [];
+  while (num < 56) {
+    const fileName = num < 10 ? `00${num}` : `0${num}`;
+    fileNames.push(fileName);
+    num += 1;
+  }
+  return fileNames;
+})();
+
+const promiseAndResolveList = images.map(() => {
+  let resolve
+  const promise = new Promise(r => {
+    resolve = r
+  })
+  return { promise, resolve }
+})
+
 export default function Gallery(props) {
   const [showsModal, setShowsModal] = useState(false);
   const [isScrolling, setScroll] = useState(false);
@@ -15,21 +35,12 @@ export default function Gallery(props) {
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
   const [withBox, setWithBox] = useState(false);
+  const [loading, setLoading] = useState(true)
   const [debouncedScroll] = useDebouncedCallback(() => {
     setScroll(false);
   }, 300);
 
-  const picker = "./images/picker.png";
-  const images = (() => {
-    let num = 1;
-    const fileNames = [];
-    while (num < 56) {
-      const fileName = num < 10 ? `00${num}` : `0${num}`;
-      fileNames.push(fileName);
-      num += 1;
-    }
-    return fileNames;
-  })();
+
 
   const handleImageChange = () => {
     setWithBox(true);
@@ -67,59 +78,70 @@ export default function Gallery(props) {
       });
     };
   }, [debouncedScroll]);
+
+  useEffect(() => {
+    Promise.all(promiseAndResolveList.map(item => item.promise))
+      .then(() => {
+        setLoading(false)
+      })
+  }, [])
   const [r, g, b] = currentColor;
   return (
     <>
-      {!isScrolling && !showsModal && (
-        <span
-          style={{
-            background: "#fff",
-            position: "fixed",
-            top: `${mouseY}px`,
-            left: `${mouseX}px`,
-            fontSize: "1rem"
-          }}
-        >
-          <div>R: {r}</div>
-          <div>G: {g}</div>
-          <div>B: {b}</div>
-        </span>
-      )}
-      <div className="header">
-        <header>darkest color as night</header>
-        <span>Tag</span>
-      </div>
-      <div className={classNames("scroll", { scrolling: isScrolling })}>
-        scroll
-      </div>
-      <div
-        className="gallery-container"
-        style={{ cursor: `url(${picker}),auto` }}
-      >
-        {images.map(imageSrc => (
-          <Image
-            imageSrc={imageSrc}
-            key={imageSrc}
-            onImageClick={onImageClick}
-            handleColor={handleColor}
-            handleMouseX={handleMouseX}
-            handleMouseY={handleMouseY}
-          />
-        ))}
-      </div>
-      <Modal showsModal={showsModal} onCloseModal={onCloseModal}>
-        <span onMouseOver={handleImageChange} onMouseOut={handleImageOut}>
-          <img
-            src={
-              withBox
-                ? `./images/box_added/${imageSrc}_2.jpg`
-                : `./images/overall/${imageSrc}.jpg`
-            }
-          />
-        </span>
-        <p>{imageSrc && imageList[imageSrc].when}</p>
-        <p>{imageSrc && imageList[imageSrc].where}</p>
-      </Modal>
+        <div style={{display: loading ? 'block' : 'none'}}>로딩중</div>
+          <div style={{display: loading ? 'none' : 'block'}}>
+            {!isScrolling && !showsModal && (
+              <span
+                style={{
+                  background: "#fff",
+                  position: "fixed",
+                  top: `${mouseY}px`,
+                  left: `${mouseX}px`,
+                  fontSize: "1rem"
+                }}
+              >
+                <div>R: {r}</div>
+                <div>G: {g}</div>
+                <div>B: {b}</div>
+              </span>
+            )}
+            <div className="header">
+              <header>darkest color as night</header>
+              <span>Tag</span>
+            </div>
+            <div className={classNames("scroll", { scrolling: isScrolling })}>
+              scroll
+        </div>
+            <div
+              className="gallery-container"
+              style={{ cursor: `url(${picker}),auto` }}
+            >
+              {images.map((imageSrc, imageIndex) => (
+                <Image
+                  imageSrc={imageSrc}
+                  key={imageSrc}
+                  onImageClick={onImageClick}
+                  onLoad={promiseAndResolveList[imageIndex].resolve}
+                  handleColor={handleColor}
+                  handleMouseX={handleMouseX}
+                  handleMouseY={handleMouseY}
+                />
+              ))}
+            </div>
+            <Modal showsModal={showsModal} onCloseModal={onCloseModal}>
+              <span onMouseOver={handleImageChange} onMouseOut={handleImageOut}>
+                <img
+                  src={
+                    withBox
+                      ? `./images/box_added/${imageSrc}_2.jpg`
+                      : `./images/overall/${imageSrc}.jpg`
+                  }
+                />
+              </span>
+              <p>{imageSrc && imageList[imageSrc].when}</p>
+              <p>{imageSrc && imageList[imageSrc].where}</p>
+            </Modal>
+          </div>
     </>
   );
 }

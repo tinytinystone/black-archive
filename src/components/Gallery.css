@@ -7,7 +7,7 @@ header{
     padding-top: 5px;
 }
 img {
-    width: 32%;
+    /* width: 32%; */
     cursor: url('/images/picker.png');
 }
 .scroll {

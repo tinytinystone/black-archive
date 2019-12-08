@@ -12,27 +12,42 @@ export default function Image(props) {
 
   const handlePickColor = (e) => {
     const { target, clientX, clientY } = e;
-    debouncedPickColor({ target, clientX, clientY });
+    // debouncedPickColor({ target, clientX, clientY });
+    pickColor({target, clientX, clientY})
   };
 
   const imgEl = useRef(null);
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-  const devicePixelRatio = window.devicePixelRatio;
+  const canvasRef = useRef();
+  const contextRef = useRef();
 
+  useEffect(() => {
+    if (imgEl.current) {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      canvasRef.current = canvas
+      contextRef.current = context
+    
+      canvas.height = imgEl.current.naturalHeight;
+      canvas.width = imgEl.current.naturalWidth;
+      context.clearRect(0, 0, imgEl.current.naturalWidth, imgEl.current.naturalHeight);
+      context.drawImage(imgEl.current, 0, 0);
+    }
+    // eslint-disable-next-line
+  }, [imgEl.current])
+
+  
   const pickColor = ({ target, clientX, clientY }) => {
     let color = null;
     const rect = target.getBoundingClientRect();
-
-    const image = imgEl.current;
-    canvas.height = image.naturalHeight;
-    canvas.width = image.naturalWidth;
-    context.clearRect(0, 0, image.naturalWidth, image.naturalHeight);
-    context.drawImage(image, 0, 0);
+    // FIXME: 정의 찾아보기
+    const devicePixelRatio = window.devicePixelRatio;
   
-    color = context.getImageData(
-      (clientX - rect.x) * (canvas.width / rect.width) * devicePixelRatio,
-      (clientY - rect.y) * (canvas.width / rect.width) * devicePixelRatio,
+    color = contextRef.current.getImageData(
+      // (clientX - rect.x) * (canvasRef.current.width / rect.width) * devicePixelRatio,
+      // (clientY - rect.y) * (canvasRef.current.width / rect.width) * devicePixelRatio,
+      (clientX - rect.x) * (canvasRef.current.width / rect.width),
+      (clientY - rect.y) * (canvasRef.current.width / rect.width),
       1,
       1
     );
@@ -47,6 +62,7 @@ export default function Image(props) {
   return (
     <>
       <img
+        onLoad={props.onLoad}
         ref={imgEl}
         src={`./images/cropped/${props.imageSrc}_1.jpg`}
         onMouseMove={handlePickColor}
