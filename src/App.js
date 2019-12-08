@@ -9,6 +9,12 @@ import "./App.css";
 function App() {
   return (
     <>
+      <div className="hidden">
+        <img
+          src="./picker.png"
+          alt="picker"
+        />
+      </div>
       <Router>
         <div className="container">
           <Switch>
@@ -19,12 +25,6 @@ function App() {
           </Switch>
         </div>
       </Router>
-      <div className="hidden">
-        <img
-          src="./picker.png"
-          alt="picker"
-        />
-      </div>
     </>
   );
 }
