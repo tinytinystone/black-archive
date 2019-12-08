@@ -27,9 +27,22 @@
   padding: 10px;
 }
 
+.tab-item ul {
+  margin: 0;
+  padding: 0;
+}
+
 .tab-item li {
   cursor: pointer;
   color: dimgray;
+  margin: 0;
+  padding: 3px 0 0 0;
+  list-style: none;
+}
+
+.tab-item li:before {
+  content: '- ';
+  text-indent: -5px;
 }
 
 .tab-item li:hover {

@@ -3,11 +3,12 @@ import classNames from "classnames";
 import { useDebouncedCallback } from "use-debounce";
 import moment from 'moment'
 import { imageList } from "../data/imageList";
+import { Link } from 'react-router-dom'
 
 import Image from "./Image";
 import Modal from "./Modal";
 import "./Gallery.css";
-import Octicon, { Settings, X } from "@primer/octicons-react";
+import Octicon, { Settings, X, Home } from "@primer/octicons-react";
 
 const images = (() => {
   let num = 1;
@@ -134,8 +135,13 @@ export default function Gallery(props) {
     <>
       <div className="header" style={{ position: 'relative' }}>
         <header>darkest color as night</header>
+        <Link to="/">
+          <div style={{ position: 'absolute', top: '13px', left: '2px', cursor: 'pointer' }}>
+            <Octicon icon={Home} size='medium' />
+          </div>
+        </Link>
         <div style={{ position: 'absolute', top: '13px', right: '2px', cursor: 'pointer' }} onClick={onSearchClick}>
-          <Octicon icon={Settings} size='medium' onClick={onSearchClick} />
+          <Octicon icon={Settings} size='medium' />
         </div>
       </div>
       <div className="loading" style={{ display: loading ? 'block' : 'none' }}>
@@ -149,7 +155,7 @@ export default function Gallery(props) {
               <h3>Sort by</h3>
               <ul>
                 <li onClick={() => setSortBy('dates')} style={{ color: sortBy === 'dates' ? 'black' : 'dimgray' }}>Dates</li>
-                <li onClick={() => setSortBy('names')} style={{ color: sortBy === 'names' ? 'black' : 'dimgray' }}>Names</li>
+                <li onClick={() => setSortBy('names')} style={{ color: sortBy === 'names' ? 'black' : 'dimgray' }}>Default</li>
               </ul>
             </div>
             <div className="tab-item">
