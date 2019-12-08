@@ -10,8 +10,8 @@ export default function Intro(props) {
           <Link to="/gallery">Black</Link>
         </strong>{" "}
         is the darkest color, the result of the absence or complete absorption
-        of visible light. It is an achromatic color, a color without hue, like
-        white and gray. It is often used symbolically or figuratively to
+        of visible light.<br />It is an achromatic color, a color without hue, like
+        white and gray.<br />It is often used symbolically or figuratively to
         represent darkness, while white represents light.
       </div>
     </div>

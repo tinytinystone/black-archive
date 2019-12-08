@@ -1,24 +1,21 @@
 header{
     text-align: center;
     height: 10vh;
-    font-size: 3.6rem;
+    font-size: 3.2rem;
     letter-spacing: 10px;
-    font-weight: 900;
     padding-top: 5px;
-}
-img {
-    /* width: 32%; */
 }
 .gallery-img{
     cursor: url('/images/picker.png') 0 31, auto;
+    width: 33.3%
 }
 .modal-container{
     display: flex;
+    overflow: auto;
 }
 .modal-image{
 }
 .modal-desc{
     color: grey;
     font-size: 2.3rem;
-    font-weight: 600;
 }

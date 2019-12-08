@@ -1,4 +1,6 @@
 import React from 'react'
+import Octicon, {X} from '@primer/octicons-react'
+
 import './Modal.css'
 
 export default function Modal({ showsModal, onCloseModal, children }) {
@@ -6,7 +8,7 @@ export default function Modal({ showsModal, onCloseModal, children }) {
     return (
         <div className={showHideClassName}>
             <div className="modal-main">
-                <div onClick={onCloseModal} className="close">X</div>
+                <div onClick={onCloseModal} className="close"><Octicon icon={X} /></div>
                 {children}
             </div>
         </div>

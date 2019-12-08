@@ -5,10 +5,10 @@
     height: 100vh;
 }
 .intro{
-    font-size: 2.7rem;
-    line-height: 3;
+    margin: auto;
+    font-size: 2.4rem;
+    line-height: 2;
     color: grey;
-    font-weight: 900;
 }
 .start{
     color: #191919;
