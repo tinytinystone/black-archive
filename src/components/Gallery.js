@@ -40,8 +40,6 @@ export default function Gallery(props) {
     setScroll(false);
   }, 300);
 
-
-
   const handleImageChange = () => {
     setWithBox(true);
   };
@@ -88,9 +86,15 @@ export default function Gallery(props) {
   const [r, g, b] = currentColor;
   return (
     <>
-      <div style={{ display: loading ? 'block' : 'none' }}>로딩중</div>
+      <div className="header">
+        <header>darkest color as night</header>
+        <span>Tag</span>
+      </div>
+      <div className="loading" style={{ display: loading ? 'block' : 'none' }}>
+        <img src="./images/loading.gif" alt="loading" />
+      </div>
       <div style={{ display: loading ? 'none' : 'block' }}>
-        {!isScrolling && !showsModal && (
+        {!isScrolling && !showsModal && !!mouseX && !!mouseY && (
           <span
             style={{
               background: "#fff",
@@ -105,10 +109,6 @@ export default function Gallery(props) {
             <div>B: {b}</div>
           </span>
         )}
-        <div className="header">
-          <header>darkest color as night</header>
-          <span>Tag</span>
-        </div>
         <div className={classNames("scroll", { scrolling: isScrolling })} />
         <div
           className="gallery-container"
@@ -128,23 +128,32 @@ export default function Gallery(props) {
         </div>
         <Modal showsModal={showsModal} onCloseModal={onCloseModal}>
           <div className="modal-container">
-          <div onMouseOver={handleImageChange} onMouseOut={handleImageOut} className="modal-image">
-            <img
-              src={
-                withBox
-                  ? `./images/box_added/${imageSrc}_2.jpg`
-                  : `./images/overall/${imageSrc}.jpg`
-              }
-              alt={imageSrc}
-            />
-          </div>
-          <div className="modal-desc">
-            <p>{imageSrc && imageList[imageSrc].when}</p>
-            <p>{imageSrc && imageList[imageSrc].where}</p>
-          </div>
+            <div onMouseOver={handleImageChange} onMouseOut={handleImageOut} className="modal-image">
+              <img
+                src={
+                  withBox
+                    ? `./images/box_added/${imageSrc}_2.jpg`
+                    : `./images/overall/${imageSrc}.jpg`
+                }
+                alt={imageSrc}
+              />
+            </div>
+            <div className="modal-desc">
+              <p>{imageSrc && imageList[imageSrc].when}</p>
+              <p>{imageSrc && imageList[imageSrc].where}</p>
+            </div>
           </div>
         </Modal>
       </div>
+      {images.map((imageSrc, imageIndex) => (
+        <div className="hidden" key={imageSrc+imageIndex}>
+          <img
+            src={`./images/box_added/${imageSrc}_2.jpg`}
+            alt={imageSrc}
+          />
+          <img src={`./images/overall/${imageSrc}.jpg`} alt="imageSrc" />
+        </div>
+      ))}
     </>
-  );
+  )
 }

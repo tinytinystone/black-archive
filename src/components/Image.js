@@ -1,11 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { useDebouncedCallback } from "use-debounce";
 
 export default function Image(props) {
-  const [debouncedPickColor] = useDebouncedCallback(({ target, clientX, clientY }) => {    
-    pickColor({ target, clientX, clientY });
-  }, 30);
-
   const handleImageClick = () => {
     props.onImageClick(props.imageSrc)
   }
