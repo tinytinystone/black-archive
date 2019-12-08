@@ -16,6 +16,7 @@ header{
 .modal-image{
 }
 .modal-desc{
+    padding: 20px;
     color: grey;
     font-size: 2.3rem;
 }
