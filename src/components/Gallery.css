@@ -8,5 +8,17 @@ header{
 }
 img {
     /* width: 32%; */
+}
+.gallery-img{
     cursor: url('/images/picker.png') 0 31, auto;
+}
+.modal-container{
+    display: flex;
+}
+.modal-image{
+}
+.modal-desc{
+    color: grey;
+    font-size: 2.3rem;
+    font-weight: 600;
 }

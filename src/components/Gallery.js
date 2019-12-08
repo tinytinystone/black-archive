@@ -127,17 +127,22 @@ export default function Gallery(props) {
           ))}
         </div>
         <Modal showsModal={showsModal} onCloseModal={onCloseModal}>
-          <span onMouseOver={handleImageChange} onMouseOut={handleImageOut}>
+          <div className="modal-container">
+          <div onMouseOver={handleImageChange} onMouseOut={handleImageOut} className="modal-image">
             <img
               src={
                 withBox
                   ? `./images/box_added/${imageSrc}_2.jpg`
                   : `./images/overall/${imageSrc}.jpg`
               }
+              alt={imageSrc}
             />
-          </span>
-          <p>{imageSrc && imageList[imageSrc].when}</p>
-          <p>{imageSrc && imageList[imageSrc].where}</p>
+          </div>
+          <div className="modal-desc">
+            <p>{imageSrc && imageList[imageSrc].when}</p>
+            <p>{imageSrc && imageList[imageSrc].where}</p>
+          </div>
+          </div>
         </Modal>
       </div>
     </>

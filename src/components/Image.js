@@ -62,11 +62,13 @@ export default function Image(props) {
   return (
     <>
       <img
+        className="gallery-img"
         onLoad={props.onLoad}
         ref={imgEl}
         src={`./images/cropped/${props.imageSrc}_1.jpg`}
         onMouseMove={handlePickColor}
         onClick={handleImageClick}
+        alt={props.imageSrc}
       />
     </>
   );
