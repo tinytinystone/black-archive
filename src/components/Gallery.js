@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import Image from "./Image";
 import Modal from "./Modal";
 import "./Gallery.css";
-import Octicon, { Settings, X, Home } from "@primer/octicons-react";
+import Octicon, { X } from "@primer/octicons-react";
 
 const images = (() => {
   let num = 1;
@@ -136,16 +136,16 @@ export default function Gallery(props) {
       <div className="header" style={{ position: 'relative' }}>
         <header>darkest color as night</header>
         <Link to="/">
-          <div style={{ position: 'absolute', top: '13px', left: '2px', cursor: 'pointer' }}>
-            <Octicon icon={Home} size='medium' />
+          <div style={{ position: 'absolute', top: '17px', left: '2px', cursor: 'pointer' }}>
+            <img src="./images/home.png" alt="home icon" className="icon" />
           </div>
         </Link>
-        <div style={{ position: 'absolute', top: '13px', right: '2px', cursor: 'pointer' }} onClick={onSearchClick}>
-          <Octicon icon={Settings} size='medium' />
+        <div style={{ position: 'absolute', top: '17px', right: '2px', cursor: 'pointer' }} onClick={onSearchClick}>
+        <img src="./images/sort.png" alt="home icon" className="icon" />
         </div>
       </div>
       <div className="loading" style={{ display: loading ? 'block' : 'none' }}>
-        <img src="./images/loading.gif" alt="loading" />
+        <img src="./images/loading.gif" alt="loading" className="icon" />
       </div>
       <div style={{ display: loading ? 'none' : 'block' }}>
         <Modal showsModal={search}>
