@@ -218,5 +218,25 @@ export const imageList = {
   "055": {
     when: "2019-08-24T20:09:00",
     where: "708, Gangnam-daero, Gangnam-gu, Seoul, Korea"
+  },
+  "056": {
+    when: "2019-12-12T21:23:00",
+    where: "308, Gangnam-daero, Gangnam-gu, Seoul, Korea"
+  },
+  "057": {
+    when: "2019-12-15T20:26:00",
+    where: "9, Janggogae-ro 231beon-gil, Seo-gu, Incheon, Korea"
+  },
+  "058": {
+    when: "2019-12-03T20:46:00",
+    where: "47, Seochojungang-ro 22-gil, Seocho-gu, Seoul, Korea"
+  },
+  "059": {
+    when: "2019-12-06T21:05:00",
+    where: "24, Wangsan-ro 9-gil, Dongdaemun-gu, Seoul, Korea"
+  },
+  "060": {
+    when: "2019-11-27T20:32:00",
+    where: "276, Donggyo-ro, Mapo-gu, Seoul, Korea"
   }
 };

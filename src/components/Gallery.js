@@ -1,33 +1,24 @@
 import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 import { useDebouncedCallback } from "use-debounce";
-import moment from 'moment'
+import moment from "moment";
 import { imageList } from "../data/imageList";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 import Image from "./Image";
 import Modal from "./Modal";
 import "./Gallery.css";
 import Octicon, { X } from "@primer/octicons-react";
 
-const images = (() => {
-  let num = 1;
-  const fileNames = [];
-  while (num < 56) {
-    const fileName = num < 10 ? `00${num}` : `0${num}`;
-    fileNames.push(fileName);
-    num += 1;
-  }
-  return fileNames;
-})();
+const images = Object.keys(imageList);
 
 const promiseAndResolveList = images.map(() => {
-  let resolve
+  let resolve;
   const promise = new Promise(r => {
-    resolve = r
-  })
-  return { promise, resolve }
-})
+    resolve = r;
+  });
+  return { promise, resolve };
+});
 
 export default function Gallery(props) {
   const [showsModal, setShowsModal] = useState(false);
@@ -37,19 +28,19 @@ export default function Gallery(props) {
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
   const [withBox, setWithBox] = useState(false);
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState(false)
-  const [mouseLeave, setMouseLeave] = useState(false)
-  const [when, setWhen] = useState('all')
-  const [where, setWhere] = useState('all')
-  const [sortBy, setSortBy] = useState('names')
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState(false);
+  const [mouseLeave, setMouseLeave] = useState(false);
+  const [when, setWhen] = useState("all");
+  const [where, setWhere] = useState("all");
+  const [sortBy, setSortBy] = useState("names");
   const [debouncedScroll] = useDebouncedCallback(() => {
     setScroll(false);
   }, 300);
 
   const filterImages = images
     .sort((a, b) => {
-      if (sortBy === 'dates') {
+      if (sortBy === "dates") {
         if (imageList[a].when > imageList[b].when) {
           return 1;
         }
@@ -62,30 +53,35 @@ export default function Gallery(props) {
       }
     })
     .filter(i => {
-      const byWhen = when === 'all' || imageList[i].when.includes(when)
-      let byWhere = where === 'all' || (where === 'KoreaWithOthers' ? (imageList[i].where.includes('Korea') && !imageList[i].where.includes('Seoul')) : imageList[i].where.includes(where))
-      return byWhen && byWhere
-    })
+      const byWhen = when === "all" || imageList[i].when.includes(when);
+      let byWhere =
+        where === "all" ||
+        (where === "KoreaWithOthers"
+          ? imageList[i].where.includes("Korea") &&
+            !imageList[i].where.includes("Seoul")
+          : imageList[i].where.includes(where));
+      return byWhen && byWhere;
+    });
 
   const handleTabWhen = when => {
-    setWhen(when)
-  }
+    setWhen(when);
+  };
 
   const onSearchClick = () => {
     if (search) {
-      setSearch(false)
+      setSearch(false);
     } else {
-      setSearch(true)
+      setSearch(true);
     }
-  }
+  };
 
   const handleMouseLeave = () => {
-    setMouseLeave(true)
-  }
+    setMouseLeave(true);
+  };
 
   const handleMouseOver = () => {
-    setMouseLeave(false)
-  }
+    setMouseLeave(false);
+  };
 
   const handleImageChange = () => {
     setWithBox(true);
@@ -125,58 +121,143 @@ export default function Gallery(props) {
   }, [debouncedScroll]);
 
   useEffect(() => {
-    Promise.all(promiseAndResolveList.map(item => item.promise))
-      .then(() => {
-        setLoading(false)
-      })
-  }, [])
+    Promise.all(promiseAndResolveList.map(item => item.promise)).then(() => {
+      setLoading(false);
+    });
+  }, []);
   const [r, g, b] = currentColor;
   return (
     <>
-      <div className="header" style={{ position: 'relative' }}>
+      <div className="header" style={{ position: "relative" }}>
         <header>darkest color as night</header>
         <Link to="/">
-          <div style={{ position: 'absolute', top: '17px', left: '2px', cursor: 'pointer' }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "17px",
+              left: "2px",
+              cursor: "pointer"
+            }}
+          >
             <img src="./images/home.png" alt="home icon" className="icon" />
           </div>
         </Link>
-        <div style={{ position: 'absolute', top: '17px', right: '2px', cursor: 'pointer' }} onClick={onSearchClick}>
-        <img src="./images/sort.png" alt="home icon" className="icon" />
+        <div
+          style={{
+            position: "absolute",
+            top: "17px",
+            right: "2px",
+            cursor: "pointer"
+          }}
+          onClick={onSearchClick}
+        >
+          <img src="./images/sort.png" alt="home icon" className="icon" />
         </div>
       </div>
-      <div className="loading" style={{ display: loading ? 'block' : 'none' }}>
+      <div className="loading" style={{ display: loading ? "block" : "none" }}>
         <img src="./images/loading.gif" alt="loading" className="icon" />
       </div>
-      <div style={{ display: loading ? 'none' : 'block' }}>
+      <div style={{ display: loading ? "none" : "block" }}>
         <Modal showsModal={search}>
           <div className="tab-toggle">
-            <div onClick={() => setSearch(false)} className="close"><Octicon icon={X} /></div>
+            <div onClick={() => setSearch(false)} className="close">
+              <Octicon icon={X} />
+            </div>
             <div className="tab-item">
               <h3>Sort by</h3>
               <ul>
-                <li onClick={() => setSortBy('dates')} style={{ color: sortBy === 'dates' ? 'black' : 'dimgray' }}>Dates</li>
-                <li onClick={() => setSortBy('names')} style={{ color: sortBy === 'names' ? 'black' : 'dimgray' }}>Default</li>
+                <li
+                  onClick={() => setSortBy("dates")}
+                  style={{ color: sortBy === "dates" ? "black" : "dimgray" }}
+                >
+                  Dates
+                </li>
+                <li
+                  onClick={() => setSortBy("names")}
+                  style={{ color: sortBy === "names" ? "black" : "dimgray" }}
+                >
+                  Default
+                </li>
               </ul>
             </div>
             <div className="tab-item">
               <h3>When</h3>
               <ul>
-                <li onClick={() => handleTabWhen('all')} style={{ color: when === 'all' ? 'black' : 'dimgray' }}>All</li>
-                <li onClick={() => handleTabWhen('2019')} style={{ color: when === '2019' ? 'black' : 'dimgray' }}>2019</li>
-                <li onClick={() => handleTabWhen('2018')} style={{ color: when === '2018' ? 'black' : 'dimgray' }}>2018</li>
-                <li onClick={() => handleTabWhen('2017')} style={{ color: when === '2017' ? 'black' : 'dimgray' }}>2017</li>
-                <li onClick={() => handleTabWhen('2015')} style={{ color: when === '2015' ? 'black' : 'dimgray' }}>2015</li>
+                <li
+                  onClick={() => handleTabWhen("all")}
+                  style={{ color: when === "all" ? "black" : "dimgray" }}
+                >
+                  All
+                </li>
+                <li
+                  onClick={() => handleTabWhen("2019")}
+                  style={{ color: when === "2019" ? "black" : "dimgray" }}
+                >
+                  2019
+                </li>
+                <li
+                  onClick={() => handleTabWhen("2018")}
+                  style={{ color: when === "2018" ? "black" : "dimgray" }}
+                >
+                  2018
+                </li>
+                <li
+                  onClick={() => handleTabWhen("2017")}
+                  style={{ color: when === "2017" ? "black" : "dimgray" }}
+                >
+                  2017
+                </li>
+                <li
+                  onClick={() => handleTabWhen("2015")}
+                  style={{ color: when === "2015" ? "black" : "dimgray" }}
+                >
+                  2015
+                </li>
               </ul>
             </div>
             <div className="tab-item">
               <h3>Where</h3>
               <ul>
-                <li onClick={() => setWhere('all')} style={{ color: where === 'all' ? 'black' : 'dimgray' }}>All</li>
-                <li onClick={() => setWhere('Seoul')} style={{ color: where === 'Seoul' ? 'black' : 'dimgray' }}>Korea(Seoul)</li>
-                <li onClick={() => setWhere('KoreaWithOthers')} style={{ color: where === 'KoreaWithOthers' ? 'black' : 'dimgray' }}>Korea(others)</li>
-                <li onClick={() => setWhere('Italy')} style={{ color: where === 'Italy' ? 'black' : 'dimgray' }}>Italy</li>
-                <li onClick={() => setWhere('Switzerland')} style={{ color: where === 'Switzerland' ? 'black' : 'dimgray' }}>Switzerland</li>
-                <li onClick={() => setWhere('Japan')} style={{ color: where === 'Japan' ? 'black' : 'dimgray' }}>Japan</li>
+                <li
+                  onClick={() => setWhere("all")}
+                  style={{ color: where === "all" ? "black" : "dimgray" }}
+                >
+                  All
+                </li>
+                <li
+                  onClick={() => setWhere("Seoul")}
+                  style={{ color: where === "Seoul" ? "black" : "dimgray" }}
+                >
+                  Korea(Seoul)
+                </li>
+                <li
+                  onClick={() => setWhere("KoreaWithOthers")}
+                  style={{
+                    color: where === "KoreaWithOthers" ? "black" : "dimgray"
+                  }}
+                >
+                  Korea(others)
+                </li>
+                <li
+                  onClick={() => setWhere("Italy")}
+                  style={{ color: where === "Italy" ? "black" : "dimgray" }}
+                >
+                  Italy
+                </li>
+                <li
+                  onClick={() => setWhere("Switzerland")}
+                  style={{
+                    color: where === "Switzerland" ? "black" : "dimgray"
+                  }}
+                >
+                  Switzerland
+                </li>
+                <li
+                  onClick={() => setWhere("Japan")}
+                  style={{ color: where === "Japan" ? "black" : "dimgray" }}
+                >
+                  Japan
+                </li>
               </ul>
             </div>
           </div>
@@ -215,10 +296,17 @@ export default function Gallery(props) {
           ))}
         </div>
         <Modal showsModal={showsModal} onCloseModal={onCloseModal}>
-          <div onClick={onCloseModal} className="close"><Octicon icon={X} /></div>
+          <div onClick={onCloseModal} className="close">
+            <Octicon icon={X} />
+          </div>
           <div className="modal-container">
-            <div onMouseOver={handleImageChange} onMouseOut={handleImageOut} className="modal-image">
+            <div
+              onMouseOver={handleImageChange}
+              onMouseOut={handleImageOut}
+              className="modal-image"
+            >
               <img
+                style={{ maxWidth: "650px" }}
                 src={
                   withBox
                     ? `./images/box_added/${imageSrc}_2.jpg`
@@ -228,7 +316,12 @@ export default function Gallery(props) {
               />
             </div>
             <div className="modal-desc">
-              <p>{imageSrc && moment(imageList[imageSrc].when).format('YYYY. MM. DD. hh:mm a')}</p>
+              <p>
+                {imageSrc &&
+                  moment(imageList[imageSrc].when).format(
+                    "YYYY. MM. DD. hh:mm a"
+                  )}
+              </p>
               <p>{imageSrc && imageList[imageSrc].where}</p>
             </div>
           </div>
@@ -236,13 +329,10 @@ export default function Gallery(props) {
       </div>
       {filterImages.map((imageSrc, imageIndex) => (
         <div className="hidden" key={imageSrc + imageIndex}>
-          <img
-            src={`./images/box_added/${imageSrc}_2.jpg`}
-            alt={imageSrc}
-          />
+          <img src={`./images/box_added/${imageSrc}_2.jpg`} alt={imageSrc} />
           <img src={`./images/overall/${imageSrc}.jpg`} alt="imageSrc" />
         </div>
       ))}
     </>
-  )
+  );
 }
