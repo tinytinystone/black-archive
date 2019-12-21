@@ -2,13 +2,12 @@ import React, { useEffect, useRef } from "react";
 
 export default function Image(props) {
   const handleImageClick = () => {
-    props.onImageClick(props.imageSrc)
-  }
+    props.onImageClick(props.imageSrc);
+  };
 
-  const handlePickColor = (e) => {
+  const handlePickColor = e => {
     const { target, clientX, clientY } = e;
-    // debouncedPickColor({ target, clientX, clientY });
-    pickColor({target, clientX, clientY})
+    pickColor({ target, clientX, clientY });
   };
 
   const imgEl = useRef(null);
@@ -20,24 +19,28 @@ export default function Image(props) {
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
 
-      canvasRef.current = canvas
-      contextRef.current = context
-    
+      canvasRef.current = canvas;
+      contextRef.current = context;
+
       canvas.height = imgEl.current.naturalHeight;
       canvas.width = imgEl.current.naturalWidth;
-      context.clearRect(0, 0, imgEl.current.naturalWidth, imgEl.current.naturalHeight);
+      context.clearRect(
+        0,
+        0,
+        imgEl.current.naturalWidth,
+        imgEl.current.naturalHeight
+      );
       context.drawImage(imgEl.current, 0, 0);
     }
     // eslint-disable-next-line
-  }, [imgEl.current])
+  }, [imgEl.current]);
 
-  
   const pickColor = ({ target, clientX, clientY }) => {
     let color = null;
     const rect = target.getBoundingClientRect();
     // FIXME: 정의 찾아보기
     const devicePixelRatio = window.devicePixelRatio;
-  
+
     color = contextRef.current.getImageData(
       // (clientX - rect.x) * (canvasRef.current.width / rect.width) * devicePixelRatio,
       // (clientY - rect.y) * (canvasRef.current.width / rect.width) * devicePixelRatio,
@@ -46,13 +49,10 @@ export default function Image(props) {
       1,
       1
     );
-    props.handleMouseX(clientX+5);
-    props.handleMouseY(clientY+5);
+    props.handleMouseX(clientX + 5);
+    props.handleMouseY(clientY + 5);
     props.handleColor(color.data);
   };
-  // useEffect(() => {
-  //   debouncedPickColor()
-  // }, [debouncedPickColor]);
 
   return (
     <>

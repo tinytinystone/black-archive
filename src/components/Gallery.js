@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 import { useDebouncedCallback } from "use-debounce";
 import moment from "moment";
-import { imageList } from "../data/imageList";
+import imageList from "../data/imageList.json";
 import { Link } from "react-router-dom";
 
 import Image from "./Image";
 import Modal from "./Modal";
 import "./Gallery.css";
 import Octicon, { X } from "@primer/octicons-react";
+import Search from "./Sort";
 
 const images = Object.keys(imageList);
 
@@ -63,18 +64,6 @@ export default function Gallery(props) {
       return byWhen && byWhere;
     });
 
-  const handleTabWhen = when => {
-    setWhen(when);
-  };
-
-  const onSearchClick = () => {
-    if (search) {
-      setSearch(false);
-    } else {
-      setSearch(true);
-    }
-  };
-
   const handleMouseLeave = () => {
     setMouseLeave(true);
   };
@@ -125,32 +114,19 @@ export default function Gallery(props) {
       setLoading(false);
     });
   }, []);
+
   const [r, g, b] = currentColor;
+
   return (
     <>
-      <div className="header" style={{ position: "relative" }}>
+      <div className="header">
         <header>darkest color as night</header>
         <Link to="/">
-          <div
-            style={{
-              position: "absolute",
-              top: "17px",
-              left: "2px",
-              cursor: "pointer"
-            }}
-          >
+          <div className="image-container">
             <img src="./images/home.png" alt="home icon" className="icon" />
           </div>
         </Link>
-        <div
-          style={{
-            position: "absolute",
-            top: "17px",
-            right: "2px",
-            cursor: "pointer"
-          }}
-          onClick={onSearchClick}
-        >
+        <div className="search-icon" onClick={() => setSearch(true)}>
           <img src="./images/sort.png" alt="home icon" className="icon" />
         </div>
       </div>
@@ -158,118 +134,21 @@ export default function Gallery(props) {
         <img src="./images/loading.gif" alt="loading" className="icon" />
       </div>
       <div style={{ display: loading ? "none" : "block" }}>
-        <Modal showsModal={search}>
-          <div className="tab-toggle">
-            <div onClick={() => setSearch(false)} className="close">
-              <Octicon icon={X} />
-            </div>
-            <div className="tab-item">
-              <h3>Sort by</h3>
-              <ul>
-                <li
-                  onClick={() => setSortBy("dates")}
-                  style={{ color: sortBy === "dates" ? "black" : "dimgray" }}
-                >
-                  Dates
-                </li>
-                <li
-                  onClick={() => setSortBy("names")}
-                  style={{ color: sortBy === "names" ? "black" : "dimgray" }}
-                >
-                  Default
-                </li>
-              </ul>
-            </div>
-            <div className="tab-item">
-              <h3>When</h3>
-              <ul>
-                <li
-                  onClick={() => handleTabWhen("all")}
-                  style={{ color: when === "all" ? "black" : "dimgray" }}
-                >
-                  All
-                </li>
-                <li
-                  onClick={() => handleTabWhen("2019")}
-                  style={{ color: when === "2019" ? "black" : "dimgray" }}
-                >
-                  2019
-                </li>
-                <li
-                  onClick={() => handleTabWhen("2018")}
-                  style={{ color: when === "2018" ? "black" : "dimgray" }}
-                >
-                  2018
-                </li>
-                <li
-                  onClick={() => handleTabWhen("2017")}
-                  style={{ color: when === "2017" ? "black" : "dimgray" }}
-                >
-                  2017
-                </li>
-                <li
-                  onClick={() => handleTabWhen("2015")}
-                  style={{ color: when === "2015" ? "black" : "dimgray" }}
-                >
-                  2015
-                </li>
-              </ul>
-            </div>
-            <div className="tab-item">
-              <h3>Where</h3>
-              <ul>
-                <li
-                  onClick={() => setWhere("all")}
-                  style={{ color: where === "all" ? "black" : "dimgray" }}
-                >
-                  All
-                </li>
-                <li
-                  onClick={() => setWhere("Seoul")}
-                  style={{ color: where === "Seoul" ? "black" : "dimgray" }}
-                >
-                  Korea(Seoul)
-                </li>
-                <li
-                  onClick={() => setWhere("KoreaWithOthers")}
-                  style={{
-                    color: where === "KoreaWithOthers" ? "black" : "dimgray"
-                  }}
-                >
-                  Korea(others)
-                </li>
-                <li
-                  onClick={() => setWhere("Italy")}
-                  style={{ color: where === "Italy" ? "black" : "dimgray" }}
-                >
-                  Italy
-                </li>
-                <li
-                  onClick={() => setWhere("Switzerland")}
-                  style={{
-                    color: where === "Switzerland" ? "black" : "dimgray"
-                  }}
-                >
-                  Switzerland
-                </li>
-                <li
-                  onClick={() => setWhere("Japan")}
-                  style={{ color: where === "Japan" ? "black" : "dimgray" }}
-                >
-                  Japan
-                </li>
-              </ul>
-            </div>
-          </div>
-        </Modal>
+        <Search
+          search={search}
+          setSearch={setSearch}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          where={where}
+          setWhere={setWhere}
+          when={when}
+          setWhen={setWhen}
+        />
         {!isScrolling && !showsModal && !!mouseX && !!mouseY && !mouseLeave && (
-          <span
+          <span className="mouse-with-color"
             style={{
-              background: "#fff",
-              position: "fixed",
               top: `${mouseY}px`,
               left: `${mouseX}px`,
-              fontSize: "1rem"
             }}
           >
             <div>R: {r}</div>
