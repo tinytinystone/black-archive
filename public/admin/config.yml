@@ -4,26 +4,17 @@ backend:
 media_folder: "public/images" 
 public_folder: "public/images"
 collections:
-  - name: "pages"
-    label: "Pages"
+  - name: "addData"
+    label: "addData"
     files:
       - file: "src/data/imageList.json"
-        label: "Photos"
-        name: "photos"
+        label: "addComments"
+        name: "addComments"
         fields:
-          - label: Photos
-            name: photos
+          - label: addComments
+            name: addComments
             widget: list
             fields:
-              - label: box_added
-                name: box_added_image
-                widget: image
-              - label: cropped
-                name: cropped_image
-                widget: image
-              - label: overall
-                name: overall_image
-                widget: image
               - label: key
                 name: key
                 widget: text

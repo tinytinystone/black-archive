@@ -11,7 +11,7 @@ import "./Gallery.css";
 import Octicon, { X } from "@primer/octicons-react";
 import Search from "./Sort";
 
-const images = imageList.photos;
+const images = imageList.addComments;
 
 const promiseAndResolveList = images.map(() => {
   let resolve;
