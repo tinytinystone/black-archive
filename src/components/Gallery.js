@@ -11,7 +11,7 @@ import "./Gallery.css";
 import Octicon, { X } from "@primer/octicons-react";
 import Search from "./Sort";
 
-const images = Object.keys(imageList);
+const images = imageList.photos;
 
 const promiseAndResolveList = images.map(() => {
   let resolve;
@@ -20,6 +20,7 @@ const promiseAndResolveList = images.map(() => {
   });
   return { promise, resolve };
 });
+console.log(promiseAndResolveList)
 
 export default function Gallery(props) {
   const [showsModal, setShowsModal] = useState(false);
@@ -42,25 +43,25 @@ export default function Gallery(props) {
   const filterImages = images
     .sort((a, b) => {
       if (sortBy === "dates") {
-        if (imageList[a].when > imageList[b].when) {
+        if (a.when > b.when) {
           return 1;
         }
-        if (imageList[a].when < imageList[b].when) {
+        if (a.when < b.when) {
           return -1;
         }
         return 0;
       } else {
-        return parseInt(a) - parseInt(b);
+        return parseInt(a.key) - parseInt(b.key);
       }
     })
     .filter(i => {
-      const byWhen = when === "all" || imageList[i].when.includes(when);
+      const byWhen = when === "all" || i.when.includes(when);
       let byWhere =
         where === "all" ||
         (where === "KoreaWithOthers"
-          ? imageList[i].where.includes("Korea") &&
-            !imageList[i].where.includes("Seoul")
-          : imageList[i].where.includes(where));
+          ? i.where.includes("Korea") &&
+            !i.where.includes("Seoul")
+          : i.where.includes(where));
       return byWhen && byWhere;
     });
 
@@ -123,15 +124,15 @@ export default function Gallery(props) {
         <header>darkest color as night</header>
         <Link to="/">
           <div className="image-container">
-            <img src="./images/home.png" alt="home icon" className="icon" />
+            <img src="./icon/home.png" alt="home icon" className="icon" />
           </div>
         </Link>
         <div className="search-icon" onClick={() => setSearch(true)}>
-          <img src="./images/sort.png" alt="home icon" className="icon" />
+          <img src="./icon/sort.png" alt="home icon" className="icon" />
         </div>
       </div>
       <div className="loading" style={{ display: loading ? "block" : "none" }}>
-        <img src="./images/loading.gif" alt="loading" className="icon" />
+        <img src="./icon/loading.gif" alt="loading" className="icon" />
       </div>
       <div style={{ display: loading ? "none" : "block" }}>
         <Search
@@ -162,12 +163,12 @@ export default function Gallery(props) {
           onMouseOver={handleMouseOver}
           onMouseLeave={handleMouseLeave}
         >
-          {filterImages.map((imageSrc, imageIndex) => (
+          {filterImages.map((image, index) => (
             <Image
-              imageSrc={imageSrc}
-              key={imageSrc}
+              imageSrc={image.key}
+              key={image.key}
               onImageClick={onImageClick}
-              onLoad={promiseAndResolveList[imageIndex].resolve}
+              onLoad={promiseAndResolveList[index].resolve}
               handleColor={handleColor}
               handleMouseX={handleMouseX}
               handleMouseY={handleMouseY}
@@ -188,8 +189,8 @@ export default function Gallery(props) {
                 style={{ maxWidth: "650px" }}
                 src={
                   withBox
-                    ? `./images/box_added/${imageSrc}_2.jpg`
-                    : `./images/overall/${imageSrc}.jpg`
+                    ? `./images/box_added_${imageSrc}.jpg`
+                    : `./images/${imageSrc}.jpg`
                 }
                 alt={imageSrc}
               />
@@ -197,19 +198,19 @@ export default function Gallery(props) {
             <div className="modal-desc">
               <p>
                 {imageSrc &&
-                  moment(imageList[imageSrc].when).format(
+                  moment(images[parseInt(imageSrc)].when).format(
                     "YYYY. MM. DD. hh:mm a"
                   )}
               </p>
-              <p>{imageSrc && imageList[imageSrc].where}</p>
+              <p>{imageSrc && images[parseInt(imageSrc)].where}</p>
             </div>
           </div>
         </Modal>
       </div>
-      {filterImages.map((imageSrc, imageIndex) => (
-        <div className="hidden" key={imageSrc + imageIndex}>
-          <img src={`./images/box_added/${imageSrc}_2.jpg`} alt={imageSrc} />
-          <img src={`./images/overall/${imageSrc}.jpg`} alt="imageSrc" />
+      {filterImages.map(image => (
+        <div className="hidden" key={image.key}>
+          <img src={`./images/box_added_${image.key}.jpg`} alt={image.key} />
+          <img src={`./images/${image.key}.jpg`} alt={image.key} />
         </div>
       ))}
     </>

@@ -60,7 +60,7 @@ export default function Image(props) {
         className="gallery-img"
         onLoad={props.onLoad}
         ref={imgEl}
-        src={`./images/cropped/${props.imageSrc}_1.jpg`}
+        src={`./images/cropped_${props.imageSrc}.jpg`}
         onMouseMove={handlePickColor}
         onClick={handleImageClick}
         alt={props.imageSrc}
