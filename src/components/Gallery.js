@@ -20,7 +20,6 @@ const promiseAndResolveList = images.map(() => {
   });
   return { promise, resolve };
 });
-console.log(promiseAndResolveList)
 
 export default function Gallery(props) {
   const [showsModal, setShowsModal] = useState(false);
