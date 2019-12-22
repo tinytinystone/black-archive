@@ -299,11 +299,6 @@
       "key": "060",
       "when": "2019-11-27T20:32:00",
       "where": "276, Donggyo-ro, Mapo-gu, Seoul, Korea"
-    },
-    {
-      "key": "061",
-      "when": "0000-00-00T00:00:00",
-      "where": "TEST"
     }
   ]
 }
