@@ -197,11 +197,11 @@ export default function Gallery(props) {
             <div className="modal-desc">
               <p>
                 {imageSrc &&
-                  moment(images[parseInt(imageSrc)].when).format(
+                  moment(images[parseInt(imageSrc - 1)].when).format(
                     "YYYY. MM. DD. hh:mm a"
                   )}
               </p>
-              <p>{imageSrc && images[parseInt(imageSrc)].where}</p>
+              <p>{imageSrc && images[parseInt(imageSrc - 1)].where}</p>
             </div>
           </div>
         </Modal>
