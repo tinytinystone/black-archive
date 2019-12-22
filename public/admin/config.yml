@@ -11,8 +11,8 @@ collections:
         label: "comments"
         name: "comments"
         fields:
-          - label: comment
-            name: comment
+          - label: comments
+            name: comments
             widget: list
             fields:
               - label: key
