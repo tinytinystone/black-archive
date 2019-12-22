@@ -9,9 +9,9 @@ import Image from "./Image";
 import Modal from "./Modal";
 import "./Gallery.css";
 import Octicon, { X } from "@primer/octicons-react";
-import Search from "./Sort";
+import SortModal from "./SortModal";
 
-const images = imageList.addComments;
+const images = imageList.comments;
 
 const promiseAndResolveList = images.map(() => {
   let resolve;
@@ -21,11 +21,55 @@ const promiseAndResolveList = images.map(() => {
   return { promise, resolve };
 });
 
+const ImageModal = ({
+  showsModal,
+  onCloseModal,
+  handleImageOut,
+  handleImageChange,
+  withBox,
+  imageSrc
+}) => {
+  return (
+    <Modal showsModal={showsModal} onCloseModal={onCloseModal}>
+      <div onClick={onCloseModal} className="close">
+        <Octicon icon={X} />
+      </div>
+      <div className="modal-container">
+        <div
+          onMouseOver={handleImageChange}
+          onMouseOut={handleImageOut}
+          className="modal-image"
+        >
+          <img
+            className="modal-image-img"
+            src={
+              withBox
+                ? `./images/box_added_${imageSrc}.jpg`
+                : `./images/${imageSrc}.jpg`
+            }
+            alt={imageSrc}
+          />
+        </div>
+        <div className="modal-desc">
+          <p>
+            {imageSrc &&
+              moment(images[parseInt(imageSrc - 1)].when).format(
+                "YYYY. MM. DD. hh:mm a"
+              )}
+          </p>
+          <p>{imageSrc && images[parseInt(imageSrc - 1)].where}</p>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
 export default function Gallery(props) {
   const [showsModal, setShowsModal] = useState(false);
   const [isScrolling, setScroll] = useState(false);
   const [currentColor, setCurrentColor] = useState([0, 0, 0, 0]);
   const [imageSrc, setImageSrc] = useState("");
+  const [mouseOnImageSrc, setmouseOnImageSrc] = useState("");
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
   const [withBox, setWithBox] = useState(false);
@@ -58,8 +102,7 @@ export default function Gallery(props) {
       let byWhere =
         where === "all" ||
         (where === "KoreaWithOthers"
-          ? i.where.includes("Korea") &&
-            !i.where.includes("Seoul")
+          ? i.where.includes("Korea") && !i.where.includes("Seoul")
           : i.where.includes(where));
       return byWhen && byWhere;
     });
@@ -68,7 +111,8 @@ export default function Gallery(props) {
     setMouseLeave(true);
   };
 
-  const handleMouseOver = () => {
+  const handleMouseOver = (key) => {
+    setmouseOnImageSrc(key)
     setMouseLeave(false);
   };
 
@@ -96,6 +140,8 @@ export default function Gallery(props) {
   const handleMouseY = y => {
     setMouseY(y);
   };
+
+  console.log(mouseLeave)
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -134,7 +180,7 @@ export default function Gallery(props) {
         <img src="./icon/loading.gif" alt="loading" className="icon" />
       </div>
       <div style={{ display: loading ? "none" : "block" }}>
-        <Search
+        <SortModal
           search={search}
           setSearch={setSearch}
           sortBy={sortBy}
@@ -145,10 +191,12 @@ export default function Gallery(props) {
           setWhen={setWhen}
         />
         {!isScrolling && !showsModal && !!mouseX && !!mouseY && !mouseLeave && (
-          <span className="mouse-with-color"
+          <span
+            className="mouse-with-color"
             style={{
               top: `${mouseY}px`,
               left: `${mouseX}px`,
+              display: !mouseLeave ? "block" : "none"
             }}
           >
             <div>R: {r}</div>
@@ -159,14 +207,16 @@ export default function Gallery(props) {
         <div className={classNames("scroll", { scrolling: isScrolling })} />
         <div
           className="gallery-container"
-          onMouseOver={handleMouseOver}
-          onMouseLeave={handleMouseLeave}
+          // onMouseOver={handleMouseOver}
+          // onMouseLeave={handleMouseLeave}
         >
           {filterImages.map((image, index) => (
             <Image
               imageSrc={image.key}
               key={image.key}
               onImageClick={onImageClick}
+              onMouseOver={() => handleMouseOver(image.key)}
+              onMouseLeave={handleMouseLeave}
               onLoad={promiseAndResolveList[index].resolve}
               handleColor={handleColor}
               handleMouseX={handleMouseX}
@@ -174,44 +224,19 @@ export default function Gallery(props) {
             />
           ))}
         </div>
-        <Modal showsModal={showsModal} onCloseModal={onCloseModal}>
-          <div onClick={onCloseModal} className="close">
-            <Octicon icon={X} />
-          </div>
-          <div className="modal-container">
-            <div
-              onMouseOver={handleImageChange}
-              onMouseOut={handleImageOut}
-              className="modal-image"
-            >
-              <img
-                style={{ maxWidth: "650px" }}
-                src={
-                  withBox
-                    ? `./images/box_added_${imageSrc}.jpg`
-                    : `./images/${imageSrc}.jpg`
-                }
-                alt={imageSrc}
-              />
-            </div>
-            <div className="modal-desc">
-              <p>
-                {imageSrc &&
-                  moment(images[parseInt(imageSrc - 1)].when).format(
-                    "YYYY. MM. DD. hh:mm a"
-                  )}
-              </p>
-              <p>{imageSrc && images[parseInt(imageSrc - 1)].where}</p>
-            </div>
-          </div>
-        </Modal>
+        <ImageModal
+          showsModal={showsModal}
+          onCloseModal={onCloseModal}
+          handleImageOut={handleImageOut}
+          handleImageChange={handleImageChange}
+          withBox={withBox}
+          imageSrc={imageSrc}
+        />
       </div>
-      {filterImages.map(image => (
-        <div className="hidden" key={image.key}>
-          <img src={`./images/box_added_${image.key}.jpg`} alt={image.key} />
-          <img src={`./images/${image.key}.jpg`} alt={image.key} />
+        <div className="hidden">
+          <img src={`./images/box_added_${mouseOnImageSrc}.jpg`} alt={mouseOnImageSrc} />
+          <img src={`./images/${mouseOnImageSrc}.jpg`} alt={mouseOnImageSrc} />
         </div>
-      ))}
     </>
   );
 }

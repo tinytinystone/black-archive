@@ -3,7 +3,7 @@ import Octicon, { X } from "@primer/octicons-react";
 
 import Modal from "./Modal";
 
-const Search = ({search, setSearch, sortBy, setSortBy, where, setWhere, when, setWhen}) => {
+const SortModal = ({search, setSearch, sortBy, setSortBy, where, setWhere, when, setWhen}) => {
   return (
     <Modal showsModal={search}>
       <div className="tab-toggle">
@@ -112,4 +112,4 @@ const Search = ({search, setSearch, sortBy, setSortBy, where, setWhere, when, se
   );
 };
 
-export default Search;
+export default SortModal;

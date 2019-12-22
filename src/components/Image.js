@@ -64,6 +64,8 @@ export default function Image(props) {
         onMouseMove={handlePickColor}
         onClick={handleImageClick}
         alt={props.imageSrc}
+        onMouseOver={props.onMouseOver}
+        onMouseLeave={props.onMouseLeave}
       />
     </>
   );

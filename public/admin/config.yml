@@ -4,15 +4,15 @@ backend:
 media_folder: "public/images" 
 public_folder: "public/images"
 collections:
-  - name: "addData"
-    label: "addData"
+  - name: "data"
+    label: "data"
     files:
       - file: "src/data/imageList.json"
-        label: "addComments"
-        name: "addComments"
+        label: "comments"
+        name: "comments"
         fields:
-          - label: addComments
-            name: addComments
+          - label: comment
+            name: comment
             widget: list
             fields:
               - label: key

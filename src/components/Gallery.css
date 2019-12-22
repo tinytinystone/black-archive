@@ -46,4 +46,9 @@
   background: #fff;
   position: fixed;
   font-size: 1rem;
+  width: 29px;
+  text-align: center;
+}
+.modal-image-img{
+  max-width: 650px;
 }
