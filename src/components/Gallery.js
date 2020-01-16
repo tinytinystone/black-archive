@@ -141,8 +141,6 @@ export default function Gallery(props) {
     setMouseY(y);
   };
 
-  console.log(mouseLeave)
-
   useEffect(() => {
     window.addEventListener("scroll", () => {
       setScroll(true);

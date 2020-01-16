@@ -1,5 +1,4 @@
 import React from 'react'
-import Octicon, {X} from '@primer/octicons-react'
 
 import './Modal.css'
 

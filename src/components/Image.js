@@ -38,12 +38,8 @@ export default function Image(props) {
   const pickColor = ({ target, clientX, clientY }) => {
     let color = null;
     const rect = target.getBoundingClientRect();
-    // FIXME: 정의 찾아보기
-    const devicePixelRatio = window.devicePixelRatio;
 
     color = contextRef.current.getImageData(
-      // (clientX - rect.x) * (canvasRef.current.width / rect.width) * devicePixelRatio,
-      // (clientY - rect.y) * (canvasRef.current.width / rect.width) * devicePixelRatio,
       (clientX - rect.x) * (canvasRef.current.width / rect.width),
       (clientY - rect.y) * (canvasRef.current.width / rect.width),
       1,
